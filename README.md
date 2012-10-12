@@ -1,6 +1,6 @@
 # gem-src
 
-A gem plugin that automatically `git clone`s the gem's source right after every `gem install` so you can `git log`, `git grep` or `git blame` there!
+A gem plugin that automatically `git clone`s the gem's source right after every `gem install` so you can `git log`, `git grep` and of course write your patch there!
 
 ## Installation
 
