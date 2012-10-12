@@ -1,24 +1,10 @@
-# Gem::Src
+# gem-src
 
-TODO: Write a gem description
+A gem plugin that automatically `git clone`s the gem's source right after every `gem install`
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'gem-src'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
     $ gem install gem-src
-
-## Usage
-
-TODO: Write usage instructions here
 
 ## Contributing
 

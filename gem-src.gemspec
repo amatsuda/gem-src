@@ -7,9 +7,9 @@ Gem::Specification.new do |gem|
   gem.version       = '0.0.1'
   gem.authors       = ["Akira Matsuda"]
   gem.email         = ["ronnie@dio.jp"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = 'Gem.post_install { `git clone gem_source src` }'
+  gem.summary       = 'Gem.post_install { `git clone gem_source src` }'
+  gem.homepage      = 'https://github.com/amatsuda/gem-src'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
