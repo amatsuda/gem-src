@@ -1,7 +1,7 @@
 require 'rubygems'
 
 Gem.post_install do |installer|
-  clone_dir = "#{installer.gem_dir}/src"
+  clone_dir = ENV['GEMSRC_CLONE_ROOT'] ? "#{ENV['GEMSRC_CLONE_ROOT']}/#{installer.spec.name}" : "#{installer.gem_dir}/src"
 
   if (repo = installer.spec.homepage) && !repo.empty? && !File.exists?(clone_dir)
     if repo =~ /\Ahttps?:\/\/([^.]+)\.github.com\/(.+)/
