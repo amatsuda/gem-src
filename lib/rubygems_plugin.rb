@@ -1,7 +1,9 @@
 require 'rubygems'
 
 Gem.post_install do |installer|
-  if installer.spec.homepage && !installer.spec.homepage.empty? && !File.exists?("#{installer.gem_dir}/src")
+  clone_dir = "#{installer.gem_dir}/src"
+
+  if installer.spec.homepage && !installer.spec.homepage.empty? && !File.exists?(clone_dir)
     repo = installer.spec.homepage
     if repo =~ /\Ahttps?:\/\/([^.]+)\.github.com\/(.+)/
       repo = if $1 == 'www'
@@ -16,9 +18,7 @@ Gem.post_install do |installer|
     end
 
     if !`git ls-remote #{repo} 2> /dev/null`.empty?
-      Dir.chdir installer.gem_dir do
-        `git clone #{repo} src`
-      end
+      `git clone #{repo} #{clone_dir}`
     end
   end
 end
