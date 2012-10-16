@@ -1,7 +1,12 @@
 require 'rubygems'
 
 Gem.post_install do |installer|
-  clone_dir = ENV['GEMSRC_CLONE_ROOT'] ? File.join(ENV['GEMSRC_CLONE_ROOT'], installer.spec.name) : File.join(installer.gem_dir, 'src')
+  clone_dir = if ENV['GEMSRC_CLONE_ROOT']
+    File.join ENV['GEMSRC_CLONE_ROOT'], installer.spec.name
+  else
+    gem_dir = installer.respond_to?(:gem_dir) ? installer.gem_dir : File.join(installer.gem_home, 'gems', installer.spec.full_name)
+    File.join gem_dir, 'src'
+  end
 
   if (repo = installer.spec.homepage) && !repo.empty? && !File.exists?(clone_dir)
     if repo =~ /\Ahttps?:\/\/([^.]+)\.github.com\/(.+)/
