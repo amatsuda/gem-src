@@ -34,18 +34,24 @@ So, the whole directory structure will be like this.
     ...
 Note that if you're using RVM, each of `~/.rvm/gems/*/gems/*` will have it's Git repo inside "src" directory.
 
-### GEMSRC_CLONE_ROOT env var
+### specifying gemsrc_clone_root
 
-Instead of cloning the repo under installed gem directory for each `gem install`, you can specify one single directory via `GEMSRC_CLONE_ROOT` environment variable to keep all the cloned repositories.
+Instead of cloning the repo under installed gem directory for each `gem install`, you can specify one single directory to keep all the cloned source repositories.
+
 This way, `git clone` will no more be executed per every `gem update`.
 This option would be more efficient particularly if you're frequently switching RVM gemsets, or using bundler with `--path` per each projects.
+There are two ways to specify this variable:
+
+    1) `GEMSRC_CLONE_ROOT` environment variable
+    2) add `gemsrc_clone_root` configuration in your .gemrc
 
 For example,
 
-    % GEMSRC_CLONE_ROOT=~/src gem i active_decorator
-will clone the Git repo into `~/src/active_decorator` directory if not exists.
+    % echo "gemsrc_clone_root: ~/src" >> ~/.gemrc
+    % gem i active_decorator
+will clone the source Git repo into `~/src/active_decorator` directory if not exists.
 
-Now, the whole directory structure will be like this.
+Now, the whole directory structure will look like this.
 
     ~
     ├── src
