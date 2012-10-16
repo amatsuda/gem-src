@@ -1,5 +1,18 @@
 require 'rubygems'
 
+module Gem
+  class Src
+    def git?(url)
+      !`git ls-remote #{url} 2> /dev/null`.empty?
+    end
+
+    def git_clone(repository, directory)
+      `git clone #{repository} #{directory}` if repository && !repository.empty? && git?(repository)
+    end
+  end
+end
+
+
 Gem.post_install do |installer|
   clone_dir = if ENV['GEMSRC_CLONE_ROOT']
     File.expand_path installer.spec.name, ENV['GEMSRC_CLONE_ROOT']
@@ -23,8 +36,6 @@ Gem.post_install do |installer|
       end
     end
 
-    if !`git ls-remote #{repo} 2> /dev/null`.empty?
-      `git clone #{repo} #{clone_dir}`
-    end
+    Gem::Src.new.git_clone(repo, clone_dir)
   end
 end
