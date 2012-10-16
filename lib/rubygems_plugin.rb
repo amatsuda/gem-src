@@ -37,19 +37,34 @@ module Gem
       !`git ls-remote #{url} 2> /dev/null`.empty?
     end
 
-    def git_clone(repository, directory)
-      `git clone #{repository} #{directory}` if repository && !repository.empty? && git?(repository)
+    def api
+      @api ||= Net::HTTP.get(URI.parse "http://rubygems.org/api/v1/gems/#{installer.spec.name}.yaml")
     end
 
-    def git_clone_homepage
-      unless File.exists? clone_dir
-        git_clone(installer.spec.homepage, clone_dir) || git_clone(github_url(installer.spec.homepage, clone_dir))
-      end
+    def source_code_uri
+      api[/^source_code_uri: (.*)$/, 1]
+    end
+
+    def homepage_uri
+      api[/^homepage_uri: (.*)$/, 1]
+    end
+
+    def git_clone(repository)
+      system 'git', 'clone', repository, clone_dir if repository && !repository.empty? && git?(repository)
+    end
+
+    def git_clone_homepage_or_source_code_uri_or_homepage_uri
+      return false if File.exists? clone_dir
+      git_clone(installer.spec.homepage) ||
+        git_clone(github_url(installer.spec.homepage)) ||
+        git_clone(source_code_uri) ||
+        git_clone(homepage_uri) ||
+        git_clone(github_url(homepage_uri))
     end
   end
 end
 
 
 Gem.post_install do |installer|
-  Gem::Src.new(installer).git_clone_homepage
+  Gem::Src.new(installer).git_clone_homepage_or_source_code_uri_or_homepage_uri
 end
