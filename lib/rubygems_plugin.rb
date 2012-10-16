@@ -2,11 +2,11 @@ require 'rubygems'
 
 Gem.post_install do |installer|
   clone_dir = if ENV['GEMSRC_CLONE_ROOT']
-    File.expand_path ENV['GEMSRC_CLONE_ROOT'], installer.spec.name
+    File.expand_path installer.spec.name, ENV['GEMSRC_CLONE_ROOT']
   elsif Gem.configuration[:gemsrc_clone_root]
-    File.expand_path Gem.configuration[:gemsrc_clone_root], installer.spec.name
+    File.expand_path installer.spec.name, Gem.configuration[:gemsrc_clone_root]
   else
-    gem_dir = installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(installer.gem_home, 'gems', installer.spec.full_name)
+    gem_dir = installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(File.join(installer.gem_home, 'gems', installer.spec.full_name))
     File.join gem_dir, 'src'
   end
 
