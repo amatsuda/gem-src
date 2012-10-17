@@ -61,6 +61,13 @@ Now, the whole directory structure will look like this.
     ...
 
 
+## Todo
+
+* Bundler
+
+* specs
+
+
 ## Contributing
 
 1. Fork it
