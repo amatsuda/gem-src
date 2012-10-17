@@ -1,7 +1,18 @@
 require 'rubygems'
 
 Gem.post_install do |installer|
-  if (repo = installer.spec.homepage) && !repo.empty?
+  repo = installer.spec.homepage
+  if repo.nil? || repo.empty? || repo !~ /\Ahttps?:\/\/([^.]+)\.github.com\/(.+)/
+    begin
+      require 'open-uri'
+      require 'json'
+      repo = JSON.parse(open("http://rubygems.org/api/v1/gems/#{installer.spec.name}.json").read)['source_code_uri']
+    rescue => e
+      puts e.message
+    end
+  end
+
+  if repo && !repo.empty?
     clone_dir = if ENV['GEMSRC_CLONE_ROOT']
       File.expand_path installer.spec.name, ENV['GEMSRC_CLONE_ROOT']
     elsif Gem.configuration[:gemsrc_clone_root]
