@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'open-uri'
 
 module Gem
   class Src
@@ -39,6 +38,7 @@ module Gem
     end
 
     def api
+      require 'open-uri'
       @api ||= open("http://rubygems.org/api/v1/gems/#{installer.spec.name}.yaml", &:read)
     end
 
