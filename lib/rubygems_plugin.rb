@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'open-uri'
 
 module Gem
   class Src
@@ -38,7 +39,7 @@ module Gem
     end
 
     def api
-      @api ||= Net::HTTP.get(URI.parse "http://rubygems.org/api/v1/gems/#{installer.spec.name}.yaml")
+      @api ||= open("http://rubygems.org/api/v1/gems/#{installer.spec.name}.yaml", &:read)
     end
 
     def source_code_uri
