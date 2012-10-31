@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = "gem-src"
-  gem.version       = '0.4.0'
+  gem.version       = '0.4.1'
   gem.authors       = ["Akira Matsuda"]
   gem.email         = ["ronnie@dio.jp"]
   gem.description   = 'Gem.post_install { `git clone gem_source src` }'
@@ -15,4 +15,6 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
+
+  gem.add_development_dependency 'rspec', ['>= 0']
 end
