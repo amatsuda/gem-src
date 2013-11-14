@@ -1,4 +1,8 @@
 require 'rubygems'
+require 'rubygems/installer'
+require 'rubygems/command_manager'
+
+Gem::CommandManager.instance.register_command :ginstall
 
 module Gem
   class Src
@@ -55,7 +59,7 @@ module Gem
     end
 
     def git_clone_homepage_or_source_code_uri_or_homepage_uri
-      return false if File.exists? clone_dir
+      return false if File.exist? clone_dir
       git_clone(installer.spec.homepage) ||
         git_clone(github_url(installer.spec.homepage)) ||
         git_clone(source_code_uri) ||
