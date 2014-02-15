@@ -44,6 +44,8 @@ module Gem
     def api
       require 'open-uri'
       @api ||= open("http://rubygems.org/api/v1/gems/#{installer.spec.name}.yaml", &:read)
+    rescue OpenURI::HTTPError
+      ""
     end
 
     def source_code_uri
