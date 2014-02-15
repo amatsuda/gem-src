@@ -8,7 +8,7 @@ A gem plugin that automatically `git clone`s the gem's source right after every 
     $ gem install gem-src
 
 
-## Usage (Configuration)
+## Configuration
 
 ### By default
 
@@ -59,6 +59,14 @@ Now, the whole directory structure will look like this.
     │   ├── capybara
     │   ├── i18n_generators
     ...
+
+
+## Usage
+
+When you firstly installed this gem, you might want to type in this command right after the installation.
+
+    % gem pristine --all
+This will reinstall all the already installed gems, and so will `git clone` all the repos.
 
 
 ## Todo
