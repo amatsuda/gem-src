@@ -73,6 +73,7 @@ end
 
 
 Gem.post_install do |installer|
+  next true if installer.is_a? Bundler::Source::Path::Installer
   Gem::Src.new(installer).git_clone_homepage_or_source_code_uri_or_homepage_uri
   true
 end
