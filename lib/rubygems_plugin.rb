@@ -56,17 +56,22 @@ module Gem
       api[/^homepage_uri: (.*)$/, 1]
     end
 
+    def github_organization_uri(name)
+      "https://github.com/#{name}/#{name}"
+    end
+
     def git_clone(repository)
       system 'git', 'clone', repository, clone_dir if repository && !repository.empty? && git?(repository)
     end
 
-    def git_clone_homepage_or_source_code_uri_or_homepage_uri
+    def git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
       return false if File.exist? clone_dir
       git_clone(installer.spec.homepage) ||
         git_clone(github_url(installer.spec.homepage)) ||
         git_clone(source_code_uri) ||
         git_clone(homepage_uri) ||
-        git_clone(github_url(homepage_uri))
+        git_clone(github_url(homepage_uri)) ||
+        git_clone(github_organization_uri(installer.spec.name))
     end
   end
 end
@@ -74,6 +79,6 @@ end
 
 Gem.post_install do |installer|
   next true if installer.is_a? Bundler::Source::Path::Installer
-  Gem::Src.new(installer).git_clone_homepage_or_source_code_uri_or_homepage_uri
+  Gem::Src.new(installer).git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
   true
 end
