@@ -74,13 +74,6 @@ When you firstly installed this gem, you might want to type in this command righ
 This will reinstall all the already installed gems, and so will `git clone` all the repos.
 
 
-## Todo
-
-* Bundler
-
-* specs
-
-
 ## Contributing
 
 1. Fork it
