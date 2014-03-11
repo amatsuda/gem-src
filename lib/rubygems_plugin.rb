@@ -9,7 +9,7 @@ module Gem
     attr_reader :installer
 
     def initialize(installer)
-      @installer = installer
+      @installer, @tested_repositories = installer, []
     end
 
     def clone_dir
@@ -61,7 +61,10 @@ module Gem
     end
 
     def git_clone(repository)
-      system 'git', 'clone', repository, clone_dir if repository && !repository.empty? && git?(repository)
+      return if repository.nil? || repository.empty?
+      return if @tested_repositories.include? repository
+      @tested_repositories << repository
+      system 'git', 'clone', repository, clone_dir if git?(repository)
     end
 
     def git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
