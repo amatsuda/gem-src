@@ -7,6 +7,11 @@ A gem plugin that automatically `git clone`s the gem's source right after every 
 
     $ gem install gem-src
 
+If you want to enable this as a rbenv plugin, then run:
+
+    $ git clone https://github.com/amatsuda/gem-src.git ~/.rbenv/plugins/gem-src
+
+and you get gem-src enabled for all gem and bundle commands invoked through rbenv.
 
 ## Configuration
 
