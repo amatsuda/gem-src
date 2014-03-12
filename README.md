@@ -1,23 +1,29 @@
 # gem-src
 
-A gem plugin that automatically `git clone`s the gem's source right after every `gem install` so you can `git log`, `git grep` and of course write your patch there!
+gem-src is a gem plugin && rbenv plugin that automatically `git clone`s the gem's source right after every `gem install` so you can `git log`, `git grep` and of course write your patch there!
 
 
 ## Installation
 
+### As a Rubygem
+
+gem-src is a gem plugin that can be installed via gem install command:
+
     $ gem install gem-src
 
-If you want to enable this as a rbenv plugin, then run:
+### As an rbenv plugin (recommended)
+
+Alternatively, if you're using rbenv, you can install gem-src as an rbenv plugin:
 
     $ git clone https://github.com/amatsuda/gem-src.git ~/.rbenv/plugins/gem-src
 
-and you get gem-src enabled for all gem and bundle commands invoked through rbenv.
+then you get gem-src enabled for all `gem` and `bundle` commands invoked through rbenv.
 
 ## Configuration
 
 ### By default
 
-With this gem installed, every `gem install` you perform will be followed by automatic `git clone` into the installed gem's "src" directory (if the gemspec's "homepage" property points to a Git repo).
+With this gem plugin installed, every `gem install` you perform will be followed by automatic `git clone` of the online repo into the installed gem's "src" directory (if the gemspec's "homepage" property points to a Git repo).
 
 For example, when you execute
 
@@ -37,14 +43,15 @@ So, the whole directory structure will be like this.
     │   ├── kaminari-0.14.1
     │   │   ├── src
     ...
-Note that if you're using RVM, each of `~/.rvm/gems/*/gems/*` will have it's Git repo inside "src" directory.
+Note that you might be cloning the same repository again and again as the gem is updated, or the gem install directory changes.
+For example, if you're using RVM, each of `~/.rvm/gems/*/gems/*` will have it's Git repo inside "src" directory.
 
-### specifying gemsrc_clone_root
+### specifying gemsrc_clone_root (strongly recommended)
 
 Instead of cloning the repo under installed gem directory for each `gem install`, you can specify one single directory to keep all the cloned source repositories.
 
 This way, `git clone` will no more be executed per every `gem update`.
-This option would be more efficient particularly if you're frequently switching RVM gemsets, or using bundler with `--path` per each projects.
+This option would be more efficient particularly if you're frequently switching Ruby versions or gemsets, or using bundler with `--path` per each projects.
 There are two ways to specify this variable:
 
     1) `GEMSRC_CLONE_ROOT` environment variable
@@ -66,7 +73,7 @@ Now, the whole directory structure will look like this.
     ...
 
 
-## Usage
+## Pristine
 
 When you firstly installed this gem, you might want to type in this command right after the installation.
 
