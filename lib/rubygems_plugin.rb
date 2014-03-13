@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'rubygems/installer'
 require 'rubygems/command_manager'
+require 'net/http'
 
 Gem::CommandManager.instance.register_command :ginstall
 
@@ -41,6 +42,14 @@ module Gem
       !`git ls-remote #{url} 2> /dev/null`.empty?
     end
 
+    def github?(url)
+      URI.parse(url).host == 'github.com'
+    end
+
+    def github_page_exists?(url)
+      Net::HTTP.new('github.com', 443).tap {|h| h.use_ssl = true }.request_head(url).code != '404'
+    end
+
     def api
       require 'open-uri'
       @api ||= open("http://rubygems.org/api/v1/gems/#{installer.spec.name}.yaml", &:read)
@@ -64,6 +73,7 @@ module Gem
       return if repository.nil? || repository.empty?
       return if @tested_repositories.include? repository
       @tested_repositories << repository
+      return if github?(repository) && !github_page_exists?(repository)
       system 'git', 'clone', repository, clone_dir if git?(repository)
     end
 
