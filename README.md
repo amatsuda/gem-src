@@ -9,13 +9,13 @@ gem-src is a gem plugin && rbenv plugin that automatically `git clone`s the gem'
 
 gem-src is a gem plugin that can be installed via gem install command:
 
-    $ gem install gem-src
+    % gem install gem-src
 
 ### As an rbenv plugin (recommended)
 
 Alternatively, if you're using rbenv, you can install gem-src as an rbenv plugin:
 
-    $ git clone https://github.com/amatsuda/gem-src.git ~/.rbenv/plugins/gem-src
+    % git clone https://github.com/amatsuda/gem-src.git ~/.rbenv/plugins/gem-src
 
 then you get gem-src enabled for all `gem` and `bundle` commands invoked through rbenv.
 
