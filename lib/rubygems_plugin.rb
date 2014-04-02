@@ -1,9 +1,5 @@
 require 'rubygems'
-require 'rubygems/installer'
-require 'rubygems/command_manager'
 require 'net/http'
-
-Gem::CommandManager.instance.register_command :ginstall
 
 module Gem
   class Src
