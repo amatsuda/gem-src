@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'net/http'
+require 'net/https'
 
 module Gem
   class Src
