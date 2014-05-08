@@ -1,22 +1,41 @@
 require 'rubygems'
 require 'net/https'
+require 'fileutils'
 
 module Gem
   class Src
+    USER_OR_ORG_PLACEHOLDER = '{dir}'
+
     attr_reader :installer
 
     def initialize(installer)
       @installer, @tested_repositories = installer, []
     end
 
-    def clone_dir
-      @clone_dir ||= if ENV['GEMSRC_CLONE_ROOT']
-        File.expand_path installer.spec.name, ENV['GEMSRC_CLONE_ROOT']
-      elsif Gem.configuration[:gemsrc_clone_root]
-        File.expand_path installer.spec.name, Gem.configuration[:gemsrc_clone_root]
+    def clone_dir(repository)
+      if gemsrc_clone_root
+        clone_root = gemsrc_clone_root
+        if clone_root.include?(USER_OR_ORG_PLACEHOLDER)
+          clone_root = clone_root.gsub(USER_OR_ORG_PLACEHOLDER, directory_for_repository(repository))
+          FileUtils.mkdir_p(File.expand_path(clone_root))
+        end
+
+        File.expand_path installer.spec.name, clone_root
       else
         gem_dir = installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(File.join(installer.gem_home, 'gems', installer.spec.full_name))
         File.join gem_dir, 'src'
+      end
+    end
+
+    def gemsrc_clone_root
+      ENV['GEMSRC_CLONE_ROOT'] || Gem.configuration[:gemsrc_clone_root]
+    end
+
+    def directory_for_repository(repository)
+      if %r{\A.+(?:@|://)(.+)/.+\z} =~ repository
+        $1.gsub(":", "/")
+      else
+        ""
       end
     end
 
@@ -70,11 +89,14 @@ module Gem
       return if @tested_repositories.include? repository
       @tested_repositories << repository
       return if github?(repository) && !github_page_exists?(repository)
-      system 'git', 'clone', repository, clone_dir if git?(repository)
+      return unless git?(repository)
+
+      clone_to = clone_dir(repository)
+      return true if File.exist?(clone_to)
+      system 'git', 'clone', repository, clone_to
     end
 
     def git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
-      return false if File.exist? clone_dir
       git_clone(installer.spec.homepage) ||
         git_clone(github_url(installer.spec.homepage)) ||
         git_clone(source_code_uri) ||
