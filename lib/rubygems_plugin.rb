@@ -4,7 +4,7 @@ require 'fileutils'
 
 module Gem
   class Src
-    USER_OR_ORG_PLACEHOLDER = '{dir}'
+    DIR_PLACEHOLDER = '{dir}'
 
     attr_reader :installer
 
@@ -15,8 +15,8 @@ module Gem
     def clone_dir(repository)
       if gemsrc_clone_root
         clone_root = gemsrc_clone_root
-        if clone_root.include?(USER_OR_ORG_PLACEHOLDER)
-          clone_root = clone_root.gsub(USER_OR_ORG_PLACEHOLDER, directory_for_repository(repository))
+        if clone_root.include?(DIR_PLACEHOLDER)
+          clone_root = clone_root.gsub(DIR_PLACEHOLDER, directory_for_repository(repository))
           FileUtils.mkdir_p(File.expand_path(clone_root))
         end
 
