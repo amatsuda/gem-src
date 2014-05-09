@@ -72,6 +72,28 @@ Now, the whole directory structure will look like this.
     │   ├── i18n_generators
     ...
 
+#### `{dir}` in gemsrc_clone_root
+
+`{dir}` in `gemsrc_clone_root` will be replaced with the url of the repository.
+
+For example,
+
+    % echo "gemsrc_clone_root: ~/src/{dir}" >> ~/.gemrc
+    % gem i active_decorator
+
+will clone the source Git repo into `~/src/github.com/amatsuda/active_decorator` directory if not exists.
+
+Now, the whole directory structure will look like this.
+
+    ~
+    ├── src
+    │   └── github.com
+    │        ├── amatsuda
+    │        │   ├── i18n_generators
+    │        │   └── active_decorator
+    │        ├── jnicklas
+    │        │   └── capybara
+    ...
 
 ## Pristine
 
