@@ -70,7 +70,16 @@ module Gem
       return if @tested_repositories.include? repository
       @tested_repositories << repository
       return if github?(repository) && !github_page_exists?(repository)
-      system 'git', 'clone', repository, clone_dir if git?(repository)
+
+      if ghq_available?
+        system 'ghq', 'get', repository
+      else
+        system 'git', 'clone', repository, clone_dir if git?(repository)
+      end
+    end
+
+    def ghq_available?
+      system('which', 'ghq')
     end
 
     def git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
