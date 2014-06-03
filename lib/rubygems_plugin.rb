@@ -71,15 +71,15 @@ module Gem
       @tested_repositories << repository
       return if github?(repository) && !github_page_exists?(repository)
 
-      if ghq_available?
+      if use_ghq?
         system 'ghq', 'get', repository
       else
         system 'git', 'clone', repository, clone_dir if git?(repository)
       end
     end
 
-    def ghq_available?
-      system('which', 'ghq')
+    def use_ghq?
+      ENV['GEMSRC_USE_GHQ'] || Gem.configuration[:gemsrc_use_ghq]
     end
 
     def git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
