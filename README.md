@@ -72,6 +72,24 @@ Now, the whole directory structure will look like this.
     │   ├── i18n_generators
     ...
 
+### Using ghq command (also recommended)
+
+You can tell gem-src to rely on `ghq` command instead of `git clone`.
+This requires ghq (https://github.com/motemen/ghq) to be installed, and either of the following two configurations should be made.
+
+    1) `GEMSRC_USE_GHQ` environment variable
+    2) add `gemsrc_use_ghq` configuration in your .gemrc
+
+The directory structure should be like below in this mode.
+
+    ghq.root (~/.ghq by default)
+    ├── github.com
+    │   ├── amatsuda
+    │   │   ├── database_rewinder
+    │   │   └── rfd
+    │   ├── jimweirich
+    │   │   └── rake
+    ...
 
 ## Pristine
 
