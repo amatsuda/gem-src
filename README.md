@@ -46,7 +46,7 @@ So, the whole directory structure will be like this.
 Note that you might be cloning the same repository again and again as the gem is updated, or the gem install directory changes.
 For example, if you're using RVM, each of `~/.rvm/gems/*/gems/*` will have it's Git repo inside "src" directory.
 
-### specifying gemsrc_clone_root (strongly recommended)
+### Specifying gemsrc_clone_root (strongly recommended)
 
 Instead of cloning the repo under installed gem directory for each `gem install`, you can specify one single directory to keep all the cloned source repositories.
 
