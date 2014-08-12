@@ -94,7 +94,7 @@ module Gem
 
     def api_uri_for(key)
       uri = api[Regexp.new("^#{key}_uri: (.*)$"), 1]
-      uri =~ /\Ahttps?:\/\// ? url : nil
+      uri =~ /\Ahttps?:\/\// ? uri : nil
     end
   end
 end
