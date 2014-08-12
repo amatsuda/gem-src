@@ -54,11 +54,11 @@ module Gem
     end
 
     def source_code_uri
-      api[/^source_code_uri: (.*)$/, 1]
+      api_uri_for('source_code')
     end
 
     def homepage_uri
-      api[/^homepage_uri: (.*)$/, 1]
+      api_uri_for('homepage')
     end
 
     def github_organization_uri(name)
@@ -90,6 +90,11 @@ module Gem
         git_clone(homepage_uri) ||
         git_clone(github_url(homepage_uri)) ||
         git_clone(github_organization_uri(installer.spec.name))
+    end
+
+    def api_uri_for(key)
+      uri = api[Regexp.new("^#{key}_uri: (.*)$"), 1]
+      uri =~ /\Ahttps?:\/\// ? url : nil
     end
   end
 end
