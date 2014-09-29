@@ -72,9 +72,9 @@ module Gem
       return if github?(repository) && !github_page_exists?(repository)
 
       if use_ghq?
-        system 'ghq', 'get', repository
+        spawn 'ghq', 'get', repository
       else
-        system 'git', 'clone', repository, clone_dir if git?(repository)
+        spawn 'git', 'clone', repository, clone_dir if git?(repository)
       end
     end
 
