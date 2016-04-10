@@ -11,7 +11,7 @@ gem-src is a gem plugin that can be installed via gem install command:
 
     % gem install gem-src
 
-### As an rbenv plugin (recommended)
+### :star2: As an rbenv plugin (recommended)
 
 Alternatively, if you're using rbenv, you can install gem-src as an rbenv plugin:
 
@@ -46,7 +46,7 @@ So, the whole directory structure will be like this.
 Note that you might be cloning the same repository again and again as the gem is updated, or the gem install directory changes.
 For example, if you're using RVM, each of `~/.rvm/gems/*/gems/*` will have it's Git repo inside "src" directory.
 
-### Specifying gemsrc_clone_root (strongly recommended)
+### :star2: Specifying gemsrc_clone_root (strongly recommended)
 
 Instead of cloning the repo under installed gem directory for each `gem install`, you can specify one single directory to keep all the cloned source repositories.
 
