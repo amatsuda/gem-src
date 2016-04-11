@@ -2,6 +2,14 @@
 
 gem-src is a gem plugin && rbenv plugin that automatically `git clone`s the gem's source right after every `gem install` so you can `git log`, `git grep` and of course write your patch there!
 
+***TL;DR***
+
+    % git clone https://github.com/amatsuda/gem-src.git ~/.rbenv/plugins/gem-src
+    % mkdir ~/src
+    % echo "gemsrc_clone_root: ~/src" >> ~/.gemrc
+
+Then you're all set!
+
 
 ## Installation
 
