@@ -82,8 +82,27 @@ module Gem
       ENV['GEMSRC_USE_GHQ'] || Gem.configuration[:gemsrc_use_ghq]
     end
 
+    def cloned?
+      if use_ghq?
+        candidates = [
+          installer.spec.homepage,
+          github_url(installer.spec.homepage),
+          source_code_uri,
+          homepage_uri,
+          github_url(homepage_uri),
+          github_organization_uri(installer.spec.name)
+        ].compact.map do |uri|
+          uri.gsub(%r|https?://|, '')
+        end
+        cloned_repos = `ghq list`.split
+        !(cloned_repos & candidates).empty?
+      else
+        File.exist? clone_dir
+      end
+    end
+
     def git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
-      return false if File.exist? clone_dir
+      return false if cloned?
       git_clone(installer.spec.homepage) ||
         git_clone(github_url(installer.spec.homepage)) ||
         git_clone(source_code_uri) ||
