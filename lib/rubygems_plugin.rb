@@ -25,7 +25,7 @@ module Gem
     end
 
     def github_url(url)
-      if url =~ /\Ahttps?:\/\/([^.]+)\.github\.com\/(.+)/
+      if url =~ /\Ahttps?:\/\/([^.]+)\.github\.(?:com|io)\/(.+)/
         if $1 == 'www'
           "https://github.com/#{$2}"
         elsif $1 == 'wiki'
