@@ -3,6 +3,8 @@ require 'net/https'
 
 module Gem
   class Src
+    IRREGULAR_REPOSITORIES = {'activesupport' => nil, 'actionview' => nil, 'actionpack' => nil, 'activemodel' => nil, 'activerecord' => nil, 'activejob' => nil, 'actionmailer' => nil, 'actioncable' => nil, 'railties' => nil}.freeze
+
     attr_reader :installer
 
     def initialize(installer)
@@ -89,6 +91,10 @@ module Gem
       return false if File.exist? clone_dir
 
       now = Time.now
+
+      if IRREGULAR_REPOSITORIES.key? installer.spec.name
+        return git_clone IRREGULAR_REPOSITORIES[installer.spec.name]
+      end
 
       result = git_clone(installer.spec.homepage) ||
         git_clone(github_url(installer.spec.homepage)) ||
