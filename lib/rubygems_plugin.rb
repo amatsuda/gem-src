@@ -116,7 +116,7 @@ module Gem
     end
 
     def skip_clone?
-      !!ENV["GEMSRC_SKIP"]
+      !!ENV['GEMSRC_SKIP']
     end
 
     def verbose?
