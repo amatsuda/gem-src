@@ -106,9 +106,9 @@ When you firstly installed this gem, you might want to type in this command righ
     % gem pristine --all
 This will reinstall all the already installed gems, and so will `git clone` all the repos.
 
-## Skip clone
+## Skip cloning
 
-When you want to skip cloning to repository, you can skip to clone with below command.
+If you want to skip cloning repositories, you can skip cloning by providing an environment variable `GEMSRC_SKIP`:
 
     % GEMSRC_SKIP=true bundle install
 
