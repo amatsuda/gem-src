@@ -83,6 +83,7 @@ module Gem
     end
 
     def git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
+      return false if skip_clone?
       return false if File.exist? clone_dir
       git_clone(installer.spec.homepage) ||
         git_clone(github_url(installer.spec.homepage)) ||
@@ -95,6 +96,10 @@ module Gem
     def api_uri_for(key)
       uri = api[Regexp.new("^#{key}_uri: (.*)$"), 1]
       uri =~ /\Ahttps?:\/\// ? uri : nil
+    end
+
+    def skip_clone?
+      !!ENV["GEMSRC_SKIP"]
     end
   end
 end
