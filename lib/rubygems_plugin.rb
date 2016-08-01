@@ -114,7 +114,7 @@ module Gem
 
     def api_uri_for(key)
       uri = api[Regexp.new("^#{key}_uri: (.*)$"), 1]
-      uri =~ /\Ahttps?:\/\// ? uri : nil
+      uri =~ /\A(?:https?|git):\/\// ? uri : nil
     end
 
     def skip_clone?
