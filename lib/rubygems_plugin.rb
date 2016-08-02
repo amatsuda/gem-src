@@ -106,7 +106,7 @@ module Gem
         git_clone(github_organization_uri(installer.spec.name))
 
       if verbose?
-        puts "gem-src: #{installer.spec.name} - Failed to find a repo." if result.nil?
+        puts "gem-src: #{installer.spec.name} - !!! Failed to find a repo." if result.nil?
         puts "gem-src: #{installer.spec.name} - #{Time.now - now}s"
       end
       result
