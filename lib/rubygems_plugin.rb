@@ -13,6 +13,32 @@ module Gem
       @installer, @tested_repositories = installer, []
     end
 
+    def git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
+      return false if skip_clone?
+      return false if File.exist? clone_dir
+
+      now = Time.now
+
+      if IRREGULAR_REPOSITORIES.key? installer.spec.name
+        return git_clone IRREGULAR_REPOSITORIES[installer.spec.name]
+      end
+
+      result = git_clone(installer.spec.homepage) ||
+        git_clone(github_url(installer.spec.homepage)) ||
+        git_clone(source_code_uri) ||
+        git_clone(homepage_uri) ||
+        git_clone(github_url(homepage_uri)) ||
+        git_clone(github_organization_uri(installer.spec.name))
+
+      if verbose?
+        puts "gem-src: #{installer.spec.name} - !!! Failed to find a repo." if result.nil?
+        puts "gem-src: #{installer.spec.name} - #{Time.now - now}s"
+      end
+      result
+    end
+
+    private
+
     def clone_dir
       @clone_dir ||= if ENV['GEMSRC_CLONE_ROOT']
         File.expand_path installer.spec.name, ENV['GEMSRC_CLONE_ROOT']
@@ -86,30 +112,6 @@ module Gem
 
     def use_ghq?
       ENV['GEMSRC_USE_GHQ'] || Gem.configuration[:gemsrc_use_ghq]
-    end
-
-    def git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
-      return false if skip_clone?
-      return false if File.exist? clone_dir
-
-      now = Time.now
-
-      if IRREGULAR_REPOSITORIES.key? installer.spec.name
-        return git_clone IRREGULAR_REPOSITORIES[installer.spec.name]
-      end
-
-      result = git_clone(installer.spec.homepage) ||
-        git_clone(github_url(installer.spec.homepage)) ||
-        git_clone(source_code_uri) ||
-        git_clone(homepage_uri) ||
-        git_clone(github_url(homepage_uri)) ||
-        git_clone(github_organization_uri(installer.spec.name))
-
-      if verbose?
-        puts "gem-src: #{installer.spec.name} - !!! Failed to find a repo." if result.nil?
-        puts "gem-src: #{installer.spec.name} - #{Time.now - now}s"
-      end
-      result
     end
 
     def api_uri_for(key)
