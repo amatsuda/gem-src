@@ -38,7 +38,6 @@ module Gem
     end
 
     def repositorize_installed_gem
-      gem_dir = installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(File.join(installer.gem_home, 'gems', installer.spec.full_name))
       if Dir.exist? gem_dir
         puts "gem-src: #{installer.spec.name} - repositorizing..." if verbose?
         `cd #{gem_dir} && ! git rev-parse --is-inside-work-tree 2> /dev/null && git init && git add -A && git commit -m 'Initial commit by gem-src'`
@@ -56,6 +55,10 @@ module Gem
         gem_dir = installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(File.join(installer.gem_home, 'gems', installer.spec.full_name))
         File.join gem_dir, 'src'
       end
+    end
+
+    def gem_dir
+      installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(File.join(installer.gem_home, 'gems', installer.spec.full_name))
     end
 
     def github_url(url)
