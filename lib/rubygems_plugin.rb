@@ -13,6 +13,7 @@ module Gem
       @installer, @tested_repositories = installer, []
     end
 
+    # Guess the git repo from the gemspec and perform git clone
     def git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
       return false if skip_clone?
       return false if File.exist? clone_dir
@@ -37,6 +38,7 @@ module Gem
       result
     end
 
+    # git init the installed gem so that we can directly edit the files there
     def repositorize_installed_gem
       if Dir.exist? gem_dir
         puts "gem-src: #{installer.spec.name} - repositorizing..." if verbose?
@@ -44,6 +46,7 @@ module Gem
       end
     end
 
+    # git remote add from the installed gem to the cloned repo so that we can easily transfer patches
     def remote_add_src
       if Dir.exist?(clone_dir) && Dir.exist?(gem_dir)
         puts "gem-src: #{installer.spec.name} - adding remote..." if verbose?
