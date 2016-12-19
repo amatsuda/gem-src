@@ -44,6 +44,13 @@ module Gem
       end
     end
 
+    def remote_add_src
+      if Dir.exist?(clone_dir) && Dir.exist?(gem_dir)
+        puts "gem-src: #{installer.spec.name} - adding remote..." if verbose?
+        `cd #{gem_dir} && git remote add src #{clone_dir}`
+      end
+    end
+
     private
 
     def clone_dir
@@ -148,5 +155,7 @@ Gem.post_install do |installer|
   gem_src.git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
 
   gem_src.repositorize_installed_gem
+
+  gem_src.remote_add_src
   true
 end
