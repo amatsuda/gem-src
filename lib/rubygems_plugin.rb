@@ -37,6 +37,14 @@ module Gem
       result
     end
 
+    def repositorize_installed_gem
+      gem_dir = installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(File.join(installer.gem_home, 'gems', installer.spec.full_name))
+      if Dir.exist? gem_dir
+        puts "gem-src: #{installer.spec.name} - repositorizing..." if verbose?
+        `cd #{gem_dir} && ! git rev-parse --is-inside-work-tree 2> /dev/null && git init && git add -A && git commit -m 'Initial commit by gem-src'`
+      end
+    end
+
     private
 
     def clone_dir
@@ -132,6 +140,10 @@ end
 
 Gem.post_install do |installer|
   next true if installer.class.name == 'Bundler::Source::Path::Installer'
-  Gem::Src.new(installer).git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
+
+  gem_src = Gem::Src.new installer
+  gem_src.git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
+
+  gem_src.repositorize_installed_gem
   true
 end
