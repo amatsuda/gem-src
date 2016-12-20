@@ -42,7 +42,7 @@ module Gem
     def repositorize_installed_gem
       if Dir.exist? gem_dir
         puts "gem-src: #{installer.spec.name} - repositorizing..." if verbose?
-        `cd #{gem_dir} && ! git rev-parse --is-inside-work-tree 2> /dev/null && git init && git add -A && git commit -m 'Initial commit by gem-src'`
+        `cd #{gem_dir} && ! git rev-parse --is-inside-work-tree 2> /dev/null && git init && git checkout -b gem-src_init && git add -A && git commit -m 'Initial commit by gem-src'`
       end
     end
 
