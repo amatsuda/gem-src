@@ -47,10 +47,12 @@ module Gem
     end
 
     # git remote add from the installed gem to the cloned repo so that we can easily transfer patches
-    def remote_add_src
+    def remote_add_src_and_origin
       if Dir.exist?(clone_dir) && Dir.exist?(gem_dir)
-        puts "gem-src: #{installer.spec.name} - adding remote..." if verbose?
+        puts "gem-src: #{installer.spec.name} - adding remotes..." if verbose?
         `cd #{gem_dir} && git remote add src #{clone_dir}`
+        origin = `cd #{clone_dir} && git remote get-url origin`.chomp
+        `cd #{gem_dir} && git remote set-url origin #{origin}` if origin
       end
     end
 
@@ -159,6 +161,6 @@ Gem.post_install do |installer|
 
   gem_src.repositorize_installed_gem
 
-  gem_src.remote_add_src
+  gem_src.remote_add_src_and_origin
   true
 end
