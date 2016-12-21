@@ -147,7 +147,7 @@ module Gem
     end
 
     def verbose?
-      !!ENV['GEMSRC_VERBOSE'] || Gem.configuration[:gemsrc_clone_root]
+      !!ENV['GEMSRC_VERBOSE'] || Gem.configuration[:gemsrc_verbose]
     end
   end
 end
