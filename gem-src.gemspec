@@ -19,8 +19,9 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec', ['>= 0']
 
   gem.post_install_message = <<-END
-[gem-src] If you have not yet configured "gemsrc_clone_root", we strongly recommend you to add the configuration to your .gemrc.
+[gem-src] Installing gem-src as a gem is not recommended. Please consider installing as an rbenv plugin instead.
 
+If you have not yet configured "gemsrc_clone_root", we strongly recommend you to add the configuration to your .gemrc.
 e.g.)
 % echo "gemsrc_clone_root: ~/src" >> ~/.gemrc
 
