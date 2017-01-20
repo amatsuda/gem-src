@@ -40,7 +40,7 @@ module Gem
 
     # git init the installed gem so that we can directly edit the files there
     def repositorize_installed_gem
-      if Dir.exist? gem_dir
+      if File.directory? gem_dir
         puts "gem-src: #{installer.spec.name} - repositorizing..." if verbose?
         `cd #{gem_dir} && ! git rev-parse --is-inside-work-tree 2> /dev/null && git init && git checkout -qb gem-src_init && git add -A && git commit -m 'Initial commit by gem-src'`
       end
@@ -48,7 +48,7 @@ module Gem
 
     # git remote add from the installed gem to the cloned repo so that we can easily transfer patches
     def remote_add_src_and_origin
-      if Dir.exist?(clone_dir) && Dir.exist?(gem_dir)
+      if File.directory?(clone_dir) && File.directory?(gem_dir)
         puts "gem-src: #{installer.spec.name} - adding remotes..." if verbose?
         `cd #{gem_dir} && git remote add src #{clone_dir}`
         origin = `cd #{clone_dir} && git remote get-url origin`.chomp
