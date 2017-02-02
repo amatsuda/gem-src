@@ -108,6 +108,10 @@ module Gem
       URI.parse(url).host.end_with?('github.io')
     end
 
+    def skip_clone?(url)
+      github?(url) && !github_page_exists?(url) || skip_host?(url) || github_io?(url)
+    end
+
     def api
       require 'open-uri'
       @api ||= open("https://rubygems.org/api/v1/gems/#{installer.spec.name}.yaml", &:read)
@@ -131,9 +135,7 @@ module Gem
       return if repository.nil? || repository.empty?
       return if @tested_repositories.include? repository
       @tested_repositories << repository
-      return if github?(repository) && !github_page_exists?(repository)
-      return if skip_host?(repository)
-      return if github_io?(repository)
+      return if skip_clone?(repository)
 
       puts "gem-src: #{installer.spec.name} - Cloning from #{repository}..." if verbose?
 
