@@ -6,6 +6,7 @@ require 'net/https'
 module Gem
   class Src
     IRREGULAR_REPOSITORIES = {'activesupport' => nil, 'actionview' => nil, 'actionpack' => nil, 'activemodel' => nil, 'activerecord' => nil, 'activejob' => nil, 'actionmailer' => nil, 'actioncable' => nil, 'railties' => nil, 'activeresource' => 'https://github.com/rails/activeresource.git', 'autoparse' => 'https://github.com/google/autoparse.git', 'aws-sdk-rails' => 'https://github.com/aws/aws-sdk-rails.git', 'bson' => 'https://github.com/mongodb/bson-ruby.git', 'compass-core' => 'https://github.com/Compass/compass.git', 'compass-import-once' => 'https://github.com/Compass/compass.git', 'cool.io' => 'https://github.com/tarcieri/cool.io.git', 'cucumber-core' => 'https://github.com/cucumber/cucumber-ruby-core.git', 'cucumber-wire' => 'https://github.com/cucumber/cucumber-ruby-wire.git', 'diff-lcs' => 'https://github.com/halostatue/diff-lcs.git', 'elasticsearch-api' => 'https://github.com/elastic/elasticsearch-ruby.git', 'elasticsearch-transport' => 'https://github.com/elastic/elasticsearch-ruby.git', 'erubis' => 'https://github.com/kwatch/erubis.git', 'geocoder' => 'https://github.com/alexreisner/geocoder', 'hirb' => 'https://github.com/cldwalker/hirb', 'html2haml' => 'https://github.com/haml/html2haml', 'io-console' => nil, 'kaminari-actionview' => nil, 'kaminari-activerecord' => nil, 'kaminari-core' => nil, 'meta_request' => 'https://github.com/dejan/rails_panel', 'method_source' => 'https://github.com/banister/method_source', 'origin' => 'https://github.com/mongoid/origin', 'padrino' => 'https://github.com/padrino/padrino-framework', 'padrino-admin' => nil, 'padrino-cache' => nil, 'padrino-core' => nil, 'padrino-gen' => nil, 'padrino-helpers' => nil, 'padrino-mailer' => nil, 'padrino-performance' => nil, 'padrino-support' => nil, 'paranoia' => 'https://github.com/rubysherpas/paranoia', 'pdf-core' => 'https://github.com/prawnpdf/pdf-core', 'pg' => nil, 'rack-mini-profiler' => 'https://github.com/MiniProfiler/rack-mini-profiler', 'raindrops' => 'https://github.com/tmm1/raindrops', 'redis-actionpack' => 'https://github.com/redis-store/redis-actionpack', 'redis-activesupport' => 'https://github.com/redis-store/redis-activesupport', 'redis-rack' => 'https://github.com/redis-store/redis-rack', 'redis-rails' => 'https://github.com/redis-store/redis-rails', 'rouge' => 'https://github.com/jneen/rouge', 'spreadsheet' => 'https://github.com/zdavatz/spreadsheet', 'thin' => 'https://github.com/macournoyer/thin', 'uniform_notifier' => 'https://github.com/flyerhzm/uniform_notifier'}.freeze
+    SKIP_HOSTS = %w(wiki.github.com rubygems.org).freeze
 
     attr_reader :installer
 
@@ -99,6 +100,18 @@ module Gem
       Net::HTTP.new('github.com', 443).tap {|h| h.use_ssl = true }.request_head(url).code != '404'
     end
 
+    def skip_host?(url)
+      SKIP_HOSTS.include? URI.parse(url).host
+    end
+
+    def github_io?(url)
+      URI.parse(url).host.end_with?('github.io')
+    end
+
+    def skip_clone?(url)
+      github?(url) && !github_page_exists?(url) || skip_host?(url) || github_io?(url)
+    end
+
     def api
       require 'open-uri'
       @api ||= open("https://rubygems.org/api/v1/gems/#{installer.spec.name}.yaml", &:read)
@@ -122,7 +135,7 @@ module Gem
       return if repository.nil? || repository.empty?
       return if @tested_repositories.include? repository
       @tested_repositories << repository
-      return if github?(repository) && !github_page_exists?(repository)
+      return if skip_clone?(repository)
 
       puts "gem-src: #{installer.spec.name} - Cloning from #{repository}..." if verbose?
 
