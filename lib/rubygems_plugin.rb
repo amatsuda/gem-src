@@ -52,7 +52,7 @@ module Gem
         puts "gem-src: #{installer.spec.name} - adding remotes..." if verbose?
         `cd #{gem_dir} && git remote add src #{clone_dir}`
         origin = `cd #{clone_dir} && git remote get-url origin`.chomp
-        `cd #{gem_dir} && git remote set-url origin #{origin}` if origin
+        `cd #{gem_dir} && git config remote.origin.url #{origin}` if origin
       end
     end
 
