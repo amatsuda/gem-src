@@ -148,7 +148,7 @@ module Gem
     def verbose?
       !!ENV['GEMSRC_VERBOSE'] || Gem.configuration[:gemsrc_verbose]
     end
-  end
+  end unless defined?(Src) # for rubygems test suite.
 end
 
 
