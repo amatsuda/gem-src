@@ -60,6 +60,6 @@ module Gem
       'spreadsheet' => 'https://github.com/zdavatz/spreadsheet',
       'thin' => 'https://github.com/macournoyer/thin',
       'uniform_notifier' => 'https://github.com/flyerhzm/uniform_notifier'
-    }.freeze
+    }.freeze unless defined? IRREGULAR_REPOSITORIES
   end
 end
