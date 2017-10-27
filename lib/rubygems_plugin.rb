@@ -2,7 +2,6 @@
 
 require 'rubygems'
 require 'net/https'
-require 'gem/src/irregular_repositories'
 
 module Gem
   class Src
@@ -150,6 +149,8 @@ module Gem
     end
   end unless defined?(Src) # for rubygems test suite.
 end
+
+require 'gem/src/irregular_repositories'
 
 
 Gem.post_install do |installer|
