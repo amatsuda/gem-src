@@ -31,6 +31,7 @@ module Gem
       'kaminari-actionview' => nil,
       'kaminari-activerecord' => nil,
       'kaminari-core' => nil,
+      'log4r' => 'https://github.com/colbygk/log4r',
       'meta_request' => 'https://github.com/dejan/rails_panel',
       'method_source' => 'https://github.com/banister/method_source',
       'origin' => 'https://github.com/mongoid/origin',
