@@ -118,6 +118,7 @@ module Gem
 
     def git_clone(repository)
       return if repository.nil? || repository.empty?
+      return if repository.include? '.rubyforge.org'
       return if @tested_repositories.include? repository
       @tested_repositories << repository
       return if github?(repository) && !github_page_exists?(repository)
