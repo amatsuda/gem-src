@@ -13,7 +13,6 @@ module Gem
 
     # Guess the git repo from the gemspec and perform git clone
     def git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
-      return false if skip_clone?
       return false if File.exist? clone_dir
 
       now = Time.now
@@ -141,10 +140,6 @@ module Gem
       uri =~ /\A(?:https?|git):\/\// ? uri : nil
     end
 
-    def skip_clone?
-      !!ENV['GEMSRC_SKIP']
-    end
-
     def verbose?
       !!ENV['GEMSRC_VERBOSE'] || Gem.configuration[:gemsrc_verbose]
     end
@@ -156,6 +151,7 @@ require 'gem/src/irregular_repositories'
 
 Gem.post_install do |installer|
   next true if installer.class.name == 'Bundler::Source::Path::Installer'
+  next true if !!ENV['GEMSRC_SKIP']
 
   gem_src = Gem::Src.new installer
   gem_src.git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
