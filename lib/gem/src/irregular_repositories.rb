@@ -26,6 +26,7 @@ module Gem
       'erubis' => 'https://github.com/kwatch/erubis.git',
       'geocoder' => 'https://github.com/alexreisner/geocoder',
       'hirb' => 'https://github.com/cldwalker/hirb',
+      'houston' => 'https://github.com/nomad/houston',
       'html2haml' => 'https://github.com/haml/html2haml',
       'io-console' => nil,
       'kaminari-actionview' => nil,
