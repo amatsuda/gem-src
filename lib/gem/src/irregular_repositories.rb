@@ -9,6 +9,7 @@ module Gem
       'activejob' => nil,
       'actionmailer' => nil,
       'actioncable' => nil,
+      'activestorage' => nil,
       'railties' => nil,
       'activeresource' => 'https://github.com/rails/activeresource.git',
       'autoparse' => 'https://github.com/google/autoparse.git',
