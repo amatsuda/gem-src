@@ -5,7 +5,7 @@ Plus, gem-src runs `git init` on each installed gem, and links it to the cloned 
 
 ***TL;DR***
 
-    % git clone https://github.com/amatsuda/gem-src.git ~/.rbenv/plugins/gem-src
+    % git clone https://github.com/amatsuda/gem-src.git "$(rbenv root)/plugins/gem-src"
     % mkdir ~/src
     % echo "gemsrc_clone_root: ~/src" >> ~/.gemrc
 
@@ -24,7 +24,7 @@ gem-src is a gem plugin that can be installed via gem install command:
 
 Alternatively, if you're using rbenv, you can install gem-src as an rbenv plugin:
 
-    % git clone https://github.com/amatsuda/gem-src.git ~/.rbenv/plugins/gem-src
+    % git clone https://github.com/amatsuda/gem-src.git "$(rbenv root)/plugins/gem-src"
 
 then you get gem-src enabled for all `gem` and `bundle` commands invoked through rbenv.
 
