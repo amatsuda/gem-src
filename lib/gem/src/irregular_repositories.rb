@@ -32,7 +32,7 @@ module Gem
       'hirb' => 'https://github.com/cldwalker/hirb',
       'houston' => 'https://github.com/nomad/houston',
       'html2haml' => 'https://github.com/haml/html2haml',
-      'io-console' => nil,
+      'io-console' => 'https://github.com/ruby/io-console',
       'kaminari-actionview' => nil,
       'kaminari-activerecord' => nil,
       'kaminari-core' => nil,
