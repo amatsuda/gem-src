@@ -121,6 +121,7 @@ module Gem
       return if @tested_repositories.include? repository
       @tested_repositories << repository
       return if github?(repository) && !github_page_exists?(repository)
+      return unless system 'git', 'ls-remote', repository, 'HEAD'
 
       puts "gem-src: #{installer.spec.name} - Cloning from #{repository}..." if verbose?
 
