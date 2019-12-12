@@ -98,7 +98,7 @@ module Gem
 
     def api
       require 'open-uri'
-      @api ||= URI.open("https://rubygems.org/api/v1/gems/#{installer.spec.name}.yaml", &:read)
+      @api ||= OpenURI.open_uri("https://rubygems.org/api/v1/gems/#{installer.spec.name}.yaml", &:read)
     rescue OpenURI::HTTPError
       ""
     end
