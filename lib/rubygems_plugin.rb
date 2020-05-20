@@ -21,7 +21,8 @@ module Gem
         return git_clone IRREGULAR_REPOSITORIES[installer.spec.name]
       end
 
-      result = git_clone(installer.spec.homepage) ||
+      result = git_clone(source_code_uri_from_metadata) ||
+        git_clone(installer.spec.homepage) ||
         git_clone(github_url(installer.spec.homepage)) ||
         git_clone(source_code_uri) ||
         git_clone(homepage_uri) ||
@@ -94,6 +95,10 @@ module Gem
 
     def github_page_exists?(url)
       Net::HTTP.new('github.com', 443).tap {|h| h.use_ssl = true }.request_head(url).code != '404'
+    end
+
+    def source_code_uri_from_metadata
+      installer.spec.metadata['source_code_uri']
     end
 
     def api
