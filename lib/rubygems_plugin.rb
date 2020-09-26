@@ -8,7 +8,7 @@ module Gem
     attr_reader :installer
 
     def initialize(installer)
-      @installer, @tested_repositories = installer, []
+      @installer, @spec, @tested_repositories = installer, installer.spec, []
     end
 
     # Guess the git repo from the gemspec and perform git clone
@@ -17,21 +17,21 @@ module Gem
 
       now = Time.now
 
-      if IRREGULAR_REPOSITORIES.key? installer.spec.name
-        return git_clone IRREGULAR_REPOSITORIES[installer.spec.name]
+      if IRREGULAR_REPOSITORIES.key? @spec.name
+        return git_clone IRREGULAR_REPOSITORIES[@spec.name]
       end
 
       result = git_clone(source_code_uri_from_metadata) ||
-        git_clone(installer.spec.homepage) ||
-        git_clone(github_url(installer.spec.homepage)) ||
+        git_clone(@spec.homepage) ||
+        git_clone(github_url(@spec.homepage)) ||
         git_clone(source_code_uri) ||
         git_clone(homepage_uri) ||
         git_clone(github_url(homepage_uri)) ||
-        git_clone(github_organization_uri(installer.spec.name))
+        git_clone(github_organization_uri(@spec.name))
 
       if verbose?
-        puts "gem-src: #{installer.spec.name} - !!! Failed to find a repo." if result.nil?
-        puts "gem-src: #{installer.spec.name} - #{Time.now - now}s"
+        puts "gem-src: #{@spec.name} - !!! Failed to find a repo." if result.nil?
+        puts "gem-src: #{@spec.name} - #{Time.now - now}s"
       end
       result
     end
@@ -39,7 +39,7 @@ module Gem
     # git init the installed gem so that we can directly edit the files there
     def repositorize_installed_gem
       if File.directory? gem_dir
-        puts "gem-src: #{installer.spec.name} - repositorizing..." if verbose?
+        puts "gem-src: #{@spec.name} - repositorizing..." if verbose?
         `cd #{gem_dir} && ! git rev-parse --is-inside-work-tree 2> /dev/null && git init && git checkout -qb gem-src_init && git add -A && git commit -m 'Initial commit by gem-src'`
       end
     end
@@ -47,7 +47,7 @@ module Gem
     # git remote add from the installed gem to the cloned repo so that we can easily transfer patches
     def remote_add_src_and_origin
       if File.directory?(clone_dir) && File.directory?(gem_dir)
-        puts "gem-src: #{installer.spec.name} - adding remotes..." if verbose?
+        puts "gem-src: #{@spec.name} - adding remotes..." if verbose?
         `cd #{gem_dir} && git remote add src #{clone_dir}`
         origin = `cd #{clone_dir} && git remote get-url origin`.chomp
         `cd #{gem_dir} && git config remote.origin.url #{origin}` if origin
@@ -58,17 +58,17 @@ module Gem
 
     def clone_dir
       @clone_dir ||= if ENV['GEMSRC_CLONE_ROOT']
-        File.expand_path installer.spec.name, ENV['GEMSRC_CLONE_ROOT']
+        File.expand_path @spec.name, ENV['GEMSRC_CLONE_ROOT']
       elsif Gem.configuration[:gemsrc_clone_root]
-        File.expand_path installer.spec.name, Gem.configuration[:gemsrc_clone_root]
+        File.expand_path @spec.name, Gem.configuration[:gemsrc_clone_root]
       else
-        gem_dir = installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(File.join(installer.gem_home, 'gems', installer.spec.full_name))
+        gem_dir = installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(File.join(installer.gem_home, 'gems', @spec.full_name))
         File.join gem_dir, 'src'
       end
     end
 
     def gem_dir
-      installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(File.join(installer.gem_home, 'gems', installer.spec.full_name))
+      installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(File.join(installer.gem_home, 'gems', @spec.full_name))
     end
 
     def github_url(url)
@@ -98,12 +98,12 @@ module Gem
     end
 
     def source_code_uri_from_metadata
-      installer.spec.metadata['source_code_uri']
+      @spec.metadata['source_code_uri']
     end
 
     def api
       require 'open-uri'
-      @api ||= OpenURI.open_uri("https://rubygems.org/api/v1/gems/#{installer.spec.name}.yaml", &:read)
+      @api ||= OpenURI.open_uri("https://rubygems.org/api/v1/gems/#{@spec.name}.yaml", &:read)
     rescue OpenURI::HTTPError
       ""
     end
@@ -127,7 +127,7 @@ module Gem
       @tested_repositories << repository
       return if github?(repository) && !github_page_exists?(repository)
 
-      puts "gem-src: #{installer.spec.name} - Cloning from #{repository}..." if verbose?
+      puts "gem-src: #{@spec.name} - Cloning from #{repository}..." if verbose?
 
       if use_ghq?
         system 'ghq', 'get', repository
