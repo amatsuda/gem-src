@@ -5,8 +5,6 @@ require 'net/https'
 
 module Gem
   class Src
-    attr_reader :installer
-
     def initialize(installer)
       @installer, @spec, @tested_repositories = installer, installer.spec, []
     end
@@ -62,13 +60,13 @@ module Gem
       elsif Gem.configuration[:gemsrc_clone_root]
         File.expand_path @spec.name, Gem.configuration[:gemsrc_clone_root]
       else
-        gem_dir = installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(File.join(installer.gem_home, 'gems', @spec.full_name))
+        gem_dir = @installer.respond_to?(:gem_dir) ? @installer.gem_dir : File.expand_path(File.join(@installer.gem_home, 'gems', @spec.full_name))
         File.join gem_dir, 'src'
       end
     end
 
     def gem_dir
-      installer.respond_to?(:gem_dir) ? installer.gem_dir : File.expand_path(File.join(installer.gem_home, 'gems', @spec.full_name))
+      @installer.respond_to?(:gem_dir) ? @installer.gem_dir : File.expand_path(File.join(@installer.gem_home, 'gems', @spec.full_name))
     end
 
     def github_url(url)
