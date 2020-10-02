@@ -80,7 +80,13 @@ module Gem
     end
 
     def gem_dir
-      @installer.respond_to?(:gem_dir) ? @installer.gem_dir : File.expand_path(File.join(@installer.gem_home, 'gems', @spec.full_name))
+      if @installer.respond_to?(:gem_dir)
+        @installer.gem_dir
+      elsif @installer.respond_to?(:gem_home)  # old rubygems
+        File.expand_path(File.join(@installer.gem_home, 'gems', @spec.full_name))
+      else  # bundler
+        File.expand_path(File.join(Gem.dir, 'gems', @spec.full_name))
+      end
     end
 
     def github_url(url)
