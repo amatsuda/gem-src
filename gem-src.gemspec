@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = "gem-src"
-  gem.version       = '0.9.0'
+  gem.version       = '0.10.0'
   gem.authors       = ["Akira Matsuda"]
   gem.email         = ["ronnie@dio.jp"]
   gem.description   = 'Gem.post_install { `git clone gem_source src` }'
