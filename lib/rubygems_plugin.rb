@@ -5,6 +5,21 @@ require 'net/https'
 
 module Gem
   class Src
+    class << self
+      def post_install_hook(installer)
+        return true if installer.class.name == 'Bundler::Source::Path::Installer'
+        return true if !!ENV['GEMSRC_SKIP']
+
+        gem_src = Gem::Src.new installer
+        gem_src.git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
+
+        gem_src.repositorize_installed_gem
+
+        gem_src.remote_add_src_and_origin
+        true
+      end
+    end
+
     def initialize(installer)
       @installer, @spec, @tested_repositories = installer, installer.spec, []
     end
@@ -152,14 +167,5 @@ require 'gem/src/irregular_repositories'
 
 
 Gem.post_install do |installer|
-  next true if installer.class.name == 'Bundler::Source::Path::Installer'
-  next true if !!ENV['GEMSRC_SKIP']
-
-  gem_src = Gem::Src.new installer
-  gem_src.git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
-
-  gem_src.repositorize_installed_gem
-
-  gem_src.remote_add_src_and_origin
-  true
+  Gem::Src.post_install_hook installer
 end
