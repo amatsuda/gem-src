@@ -14,12 +14,6 @@ Then you're all set!
 
 ## Installation
 
-### As a Rubygem
-
-gem-src is a gem plugin that can be installed via gem install command:
-
-    % gem install gem-src
-
 ### :star2: As an rbenv plugin (recommended)
 
 Alternatively, if you're using rbenv, you can install gem-src as an rbenv plugin:
@@ -27,6 +21,18 @@ Alternatively, if you're using rbenv, you can install gem-src as an rbenv plugin
     % git clone https://github.com/amatsuda/gem-src.git "$(rbenv root)/plugins/gem-src"
 
 then you get gem-src enabled for all `gem` and `bundle` commands invoked through rbenv.
+
+### :star2: As a Bundler plugin (experimental, but also recommended)
+
+gem-src is a bundler plugin that can be installed via bundler plugin install command:
+
+    % bundler plugin install gem-src
+
+### As a Rubygem
+
+gem-src is a gem plugin that can be installed via gem install command:
+
+    % gem install gem-src
 
 ## Configuration
 
