@@ -35,6 +35,7 @@ module Gem
       end
 
       result = git_clone(source_code_uri_from_metadata) ||
+        git_clone(github_url(source_code_uri_from_metadata)) ||
         git_clone(@spec.homepage) ||
         git_clone(github_url(@spec.homepage)) ||
         git_clone(source_code_uri) ||
@@ -100,6 +101,9 @@ module Gem
           # https://foo.github.com/bar => https://github.com/foo/bar
           "https://github.com/#{$1}/#{$2}"
         end
+      elsif url =~ %r[\A(https?://github\.com/.+/.+)/tree/]
+        # https://github.com/foo/bar/tree/v1.2.3
+        $1
       end
     end
 
