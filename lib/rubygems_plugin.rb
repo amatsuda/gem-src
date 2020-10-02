@@ -60,7 +60,6 @@ module Gem
       elsif Gem.configuration[:gemsrc_clone_root]
         File.expand_path @spec.name, Gem.configuration[:gemsrc_clone_root]
       else
-        gem_dir = @installer.respond_to?(:gem_dir) ? @installer.gem_dir : File.expand_path(File.join(@installer.gem_home, 'gems', @spec.full_name))
         File.join gem_dir, 'src'
       end
     end
