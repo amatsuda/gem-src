@@ -34,7 +34,8 @@ module Gem
         return git_clone IRREGULAR_REPOSITORIES[@spec.name]
       end
 
-      result = git_clone(github_url(source_code_uri_from_metadata)) ||
+      result =
+        git_clone(github_url(source_code_uri_from_metadata)) ||
         git_clone(source_code_uri_from_metadata) ||
         git_clone(github_url(@spec.homepage)) ||
         git_clone(@spec.homepage) ||
