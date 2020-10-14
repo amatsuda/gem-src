@@ -39,18 +39,18 @@ module Gem
         git_clone_if_github(source_code_uri_from_metadata) ||
         git_clone_if_github(github_url(@spec.homepage)) ||
         git_clone_if_github(@spec.homepage) ||
-        git_clone_if_github(github_url(scu = source_code_uri)) ||
-        git_clone_if_github(scu) ||
-        git_clone_if_github(github_url(hp = homepage_uri)) ||
-        git_clone_if_github(hp) ||
+        git_clone_if_github(github_url(source_code_uri)) ||
+        git_clone_if_github(source_code_uri) ||
+        git_clone_if_github(github_url(homepage_uri)) ||
+        git_clone_if_github(homepage_uri) ||
         git_clone(github_url(source_code_uri_from_metadata)) ||
         git_clone(source_code_uri_from_metadata) ||
         git_clone(github_url(@spec.homepage)) ||
         git_clone(@spec.homepage) ||
-        git_clone(github_url(scu = source_code_uri)) ||
-        git_clone(scu) ||
-        git_clone(github_url(hp = homepage_uri)) ||
-        git_clone(hp) ||
+        git_clone(github_url(source_code_uri)) ||
+        git_clone(source_code_uri) ||
+        git_clone(github_url(homepage_uri)) ||
+        git_clone(homepage_uri) ||
         git_clone(github_organization_uri(@spec.name))
 
       if verbose?
@@ -130,7 +130,7 @@ module Gem
     end
 
     def source_code_uri_from_metadata
-      @spec.metadata['source_code_uri']
+      @source_code_uri_from_metadata ||= @spec.metadata['source_code_uri']
     end
 
     def api
@@ -141,11 +141,11 @@ module Gem
     end
 
     def source_code_uri
-      api_uri_for('source_code')
+      @source_code_uri ||= api_uri_for('source_code')
     end
 
     def homepage_uri
-      api_uri_for('homepage')
+      @homepage_uri ||= api_uri_for('homepage')
     end
 
     def github_organization_uri(name)
