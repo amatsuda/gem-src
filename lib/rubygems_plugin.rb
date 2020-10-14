@@ -35,6 +35,14 @@ module Gem
       end
 
       result =
+        git_clone_if_github(github_url(source_code_uri_from_metadata)) ||
+        git_clone_if_github(source_code_uri_from_metadata) ||
+        git_clone_if_github(github_url(@spec.homepage)) ||
+        git_clone_if_github(@spec.homepage) ||
+        git_clone_if_github(github_url(scu = source_code_uri)) ||
+        git_clone_if_github(scu) ||
+        git_clone_if_github(github_url(hp = homepage_uri)) ||
+        git_clone_if_github(hp) ||
         git_clone(github_url(source_code_uri_from_metadata)) ||
         git_clone(source_code_uri_from_metadata) ||
         git_clone(github_url(@spec.homepage)) ||
@@ -158,6 +166,13 @@ module Gem
       else
         system 'git', 'clone', repository, clone_dir if git?(repository)
       end
+    end
+
+    def git_clone_if_github(repository)
+      return if repository.nil? || repository.empty?
+      return unless github?(repository)
+
+      git_clone repository
     end
 
     def use_ghq?
