@@ -34,13 +34,13 @@ module Gem
         return git_clone IRREGULAR_REPOSITORIES[@spec.name]
       end
 
-      result = git_clone(source_code_uri_from_metadata) ||
-        git_clone(github_url(source_code_uri_from_metadata)) ||
-        git_clone(@spec.homepage) ||
+      result = git_clone(github_url(source_code_uri_from_metadata)) ||
+        git_clone(source_code_uri_from_metadata) ||
         git_clone(github_url(@spec.homepage)) ||
+        git_clone(@spec.homepage) ||
         git_clone(source_code_uri) ||
-        git_clone(homepage_uri) ||
-        git_clone(github_url(homepage_uri)) ||
+        git_clone(github_url(hp = homepage_uri)) ||
+        git_clone(hp) ||
         git_clone(github_organization_uri(@spec.name))
 
       if verbose?
