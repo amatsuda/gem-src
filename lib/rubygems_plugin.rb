@@ -14,8 +14,6 @@ module Gem
         gem_src.git_clone_homepage_or_source_code_uri_or_homepage_uri_or_github_organization_uri
 
         gem_src.repositorize_installed_gem
-
-        gem_src.remote_add_src_and_origin
         true
       end
     end
@@ -66,10 +64,8 @@ module Gem
         puts "gem-src: #{@spec.name} - repositorizing..." if verbose?
         `cd #{gem_dir} && ! git rev-parse --is-inside-work-tree 2> /dev/null && git init && git checkout -qb gem-src_init && git add -A && git commit -m 'Initial commit by gem-src'`
       end
-    end
 
-    # git remote add from the installed gem to the cloned repo so that we can easily transfer patches
-    def remote_add_src_and_origin
+      # git remote add from the installed gem to the cloned repo so that we can easily transfer patches
       if File.directory?(clone_dir) && File.directory?(gem_dir)
         puts "gem-src: #{@spec.name} - adding remotes..." if verbose?
         `cd #{gem_dir} && git remote add src #{clone_dir}`
