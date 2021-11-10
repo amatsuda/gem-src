@@ -76,11 +76,13 @@ module Gem
 
     private
 
+    def gemsrc_clone_root
+      ENV['GEMSRC_CLONE_ROOT'] || Gem.configuration[:gemsrc_clone_root]
+    end
+
     def clone_dir
-      @clone_dir ||= if ENV['GEMSRC_CLONE_ROOT']
-        File.expand_path @spec.name, ENV['GEMSRC_CLONE_ROOT']
-      elsif Gem.configuration[:gemsrc_clone_root]
-        File.expand_path @spec.name, Gem.configuration[:gemsrc_clone_root]
+      @clone_dir ||= if gemsrc_clone_root
+        File.expand_path @spec.name, gemsrc_clone_root
       else
         File.join gem_dir, 'src'
       end
