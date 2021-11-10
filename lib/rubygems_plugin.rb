@@ -60,6 +60,11 @@ module Gem
 
     # git init the installed gem so that we can directly edit the files there
     def repositorize_installed_gem
+      # Do this only when gemsrc_clone_root is configured.
+      # Because if gemsrc_clone_root is not configured, gem_dir/src is already a git repo,
+      # and making gem_dir a git repo would cause "adding embedded git repository: src" warning
+      return unless gemsrc_clone_root
+
       if File.directory? gem_dir
         puts "gem-src: #{@spec.name} - repositorizing..." if verbose?
         `cd #{gem_dir} && ! git rev-parse --is-inside-work-tree 2> /dev/null && git init && git checkout -qb gem-src_init && git add -A && git commit -m 'Initial commit by gem-src'`
