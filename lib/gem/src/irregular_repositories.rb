@@ -40,6 +40,7 @@ module Gem
       'geocoder' => 'https://github.com/alexreisner/geocoder',
       'hirb' => 'https://github.com/cldwalker/hirb',
       'houston' => 'https://github.com/nomad/houston',
+      'haml-contrib' => 'https://github.com/haml/haml-contrib',
       'html2haml' => 'https://github.com/haml/html2haml',
       'io-console' => 'https://github.com/ruby/io-console',
       'kaminari-actionview' => nil,
