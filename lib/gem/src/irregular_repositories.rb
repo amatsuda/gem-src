@@ -79,7 +79,8 @@ module Gem
       'rubygems-update' => nil,
       'spreadsheet' => 'https://github.com/zdavatz/spreadsheet',
       'thin' => 'https://github.com/macournoyer/thin',
-      'uniform_notifier' => 'https://github.com/flyerhzm/uniform_notifier'
+      'uniform_notifier' => 'https://github.com/flyerhzm/uniform_notifier',
+      'vcr' => 'https://github.com/vcr/vcr'
     }.freeze unless defined? IRREGULAR_REPOSITORIES
   end
 end
