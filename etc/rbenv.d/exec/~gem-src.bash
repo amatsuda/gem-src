@@ -28,7 +28,12 @@ cwd="$PWD"
 cd "${BASH_SOURCE%/*}/../../../lib"
 
 # Make sure `rubygems_plugin.rb` is discovered by RubyGems by adding
-# its directory to Ruby's load path.
-export RUBYLIB="$PWD:$RUBYLIB"
+# its directory to Ruby's load path. Only once: a shim's `#!/usr/bin/env ruby`
+# shebang runs this hook again through a nested `rbenv exec`, and RubyGems
+# would load the plugin once per copy.
+case ":$RUBYLIB:" in
+  *":$PWD:"*) ;;
+  *) export RUBYLIB="$PWD:$RUBYLIB" ;;
+esac
 
 cd "$cwd"
